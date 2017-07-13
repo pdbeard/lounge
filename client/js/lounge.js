@@ -567,6 +567,24 @@ $(function() {
 		$(this).data("lastvalue", nick);
 	});
 
+	$("#view-changelog").on("click", function() {
+		$("#windows > .active")
+			.removeClass("active")
+			.find(".chat")
+			.unsticky();
+
+		$("#changelog")
+			.addClass("active");
+
+		return false;
+	}).one("click", function() {
+		socket.emit("changelog");
+	});
+
+	socket.on("changelog", function(data) {
+		$(".changelog-container").html(templates.changelog(data));
+	});
+
 	$(document).on("visibilitychange focus click", () => {
 		if (sidebar.find(".highlight").length === 0) {
 			utils.toggleNotificationMarkers(false);
